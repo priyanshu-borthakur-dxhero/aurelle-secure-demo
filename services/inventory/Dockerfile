@@ -1,9 +1,8 @@
-FROM python:3.12-slim
+FROM python:3.9-slim-buster
 WORKDIR /app
+ENV DEBUG=true
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py ./
-RUN useradd --system --no-create-home app
-USER app
 EXPOSE 8091
 CMD ["python", "app.py"]
