@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const express = require("express");
 const { pool, initialize } = require("./db");
 const logger = require("./logger");
+const { name: SERVICE_NAME, version: SERVICE_VERSION } = require("./package.json");
 
 const app = express();
 app.use(express.json());
@@ -68,7 +69,17 @@ app.get("/", (req, res) => {
       "POST /api/orders",
       "GET /api/orders?take=",
       "GET /api/orders/{id}",
+      "GET /api/version",
     ],
+  });
+});
+
+// Build info for deploy checks. The commit comes from the environment (set at image build or deploy time).
+app.get("/api/version", (req, res) => {
+  res.json({
+    service: SERVICE_NAME,
+    version: SERVICE_VERSION,
+    commit: process.env.GIT_COMMIT || "unknown",
   });
 });
 
