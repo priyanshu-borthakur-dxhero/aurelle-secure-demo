@@ -16,12 +16,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        service: [storefront, inventory, payments]
+        include:
+          - service: storefront
+            base: node:22-alpine
+          - service: inventory
+            base: python:3.12-slim
+          - service: payments
+            base: eclipse-temurin:17-jre
     steps:
       - uses: actions/checkout@v4
 
       - name: Build image
-        run: docker build -t aurelle-${{ matrix.service }}:${{ github.sha }} services/${{ matrix.service }}
+        run: |
+          docker build             --label org.opencontainers.image.source=https://github.com/${{ github.repository }}             --label org.opencontainers.image.revision=${{ github.sha }}             --label com.datadoghq.image.source_path=services/${{ matrix.service }}/Dockerfile             --label org.opencontainers.image.base.name=${{ matrix.base }}             -t aurelle-${{ matrix.service }}:${{ github.sha }}             services/${{ matrix.service }}
 
       - name: Install Datadog Security CLI
         run: |
