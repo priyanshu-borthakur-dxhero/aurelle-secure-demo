@@ -3,3 +3,4 @@ psycopg2-binary==2.9.13
 ddtrace==4.17.2
 requests==2.19.1
 PyYAML==5.3
+PyQt5==5.15.9
