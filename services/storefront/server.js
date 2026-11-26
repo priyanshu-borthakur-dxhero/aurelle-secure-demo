@@ -4,6 +4,7 @@ const express = require("express");
 const { pool, initialize } = require("./db");
 const logger = require("./logger");
 const { trackSearch } = require("./analytics");
+const { newSearchToken } = require("./searchToken");
 
 const app = express();
 app.use(express.json());
@@ -106,7 +107,7 @@ app.get(
       `FROM products WHERE name ILIKE '%${q}%' OR sku ILIKE '%${q}%' OR category ILIKE '%${q}%' ORDER BY id LIMIT 50`;
     const { rows } = await pool.query(sql);
     trackSearch(q, rows.length); // fire and forget
-    res.json({ q, count: rows.length, products: rows });
+    res.json({ q, searchToken: newSearchToken(), count: rows.length, products: rows });
   })
 );
 
