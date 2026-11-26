@@ -65,6 +65,7 @@ app.get("/", (req, res) => {
     endpoints: [
       "GET /api/products?q=&category=&page=&pageSize=",
       "GET /api/products/{id}",
+      "GET /api/search?q=",
       "POST /api/orders",
       "GET /api/orders?take=",
       "GET /api/orders/{id}",
@@ -91,6 +92,19 @@ app.get(
     );
 
     res.json({ page, pageSize, count: rows.length, products: rows });
+  })
+);
+
+// Product search: free-text lookup on name, sku or category.
+app.get(
+  "/api/search",
+  wrap(async (req, res) => {
+    const q = req.query.q || "";
+    const sql =
+      `SELECT id AS "Id", sku AS "Sku", name AS "Name", category AS "Category", price AS "Price" ` +
+      `FROM products WHERE name ILIKE '%${q}%' OR sku ILIKE '%${q}%' OR category ILIKE '%${q}%' ORDER BY id LIMIT 50`;
+    const { rows } = await pool.query(sql);
+    res.json({ q, count: rows.length, products: rows });
   })
 );
 
