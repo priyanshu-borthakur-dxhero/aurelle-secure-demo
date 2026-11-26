@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node --require dd-trace/init server.js",
-    "start:plain": "node server.js"
+    "start:plain": "node server.js",
+    "test": "node --test",
+    "test:coverage": "node --test --experimental-test-coverage --test-coverage-exclude=test/** --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info"
   },
   "engines": {
     "node": ">=20"
