@@ -21,3 +21,7 @@ Open http://localhost:8080.
 ## Branching
 
 `main` is kept clean. Changes arrive through pull requests; the Datadog PR Gate checks must pass before merge.
+
+## API notes
+
+- `GET /api/version` on the storefront returns `{service, version, commit}`; `commit` comes from the `GIT_COMMIT` env var (or `unknown`).
