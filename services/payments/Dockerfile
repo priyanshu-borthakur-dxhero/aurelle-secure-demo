@@ -5,10 +5,10 @@ RUN mvn -q -B dependency:go-offline
 COPY src ./src
 RUN mvn -q -B package -DskipTests
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 COPY --from=build /build/target/payments-service.jar ./payments-service.jar
-RUN useradd --system --no-create-home app
+RUN adduser -S -H app
 USER app
 EXPOSE 8092
 CMD ["java", "-jar", "payments-service.jar"]
